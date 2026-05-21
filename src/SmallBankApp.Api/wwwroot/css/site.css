@@ -1,0 +1,32 @@
+:root {
+  --brand-900:#071c3a;
+  --brand-700:#0b4aa2;
+  --brand-500:#0d6efd;
+  --surface:#f5f7fb;
+  --ink:#14213d;
+  --focus-ring:0 0 0 .25rem rgba(13,110,253,.35);
+}
+body { background:var(--surface); color:var(--ink); }
+.skip-link { position:absolute; top:.5rem; left:.5rem; z-index:1100; padding:.5rem .75rem; background:#fff; border-radius:.5rem; }
+.app-nav { background:linear-gradient(90deg,var(--brand-900),var(--brand-700)); box-shadow:0 8px 24px rgba(7,28,58,.2); }
+.hero-section { background:radial-gradient(circle at top right,rgba(13,110,253,.85),rgba(7,28,58,.98)), linear-gradient(135deg,var(--brand-900),var(--brand-500)); }
+.security-card { background:rgba(255,255,255,.12); border:1px solid rgba(255,255,255,.25); backdrop-filter:blur(8px); }
+.status-dot { width:.8rem; height:.8rem; display:inline-block; border-radius:50%; box-shadow:0 0 0 .35rem rgba(25,135,84,.2); }
+.app-card, .metric-card { border:0; border-radius:1rem; box-shadow:0 10px 30px rgba(20,33,61,.08); }
+.metric-card { background:#fff; padding:1rem; min-height:7rem; display:flex; flex-direction:column; justify-content:center; }
+.metric-card span { color:#5d6b82; font-size:.9rem; }
+.metric-card strong { font-size:1.65rem; line-height:1.2; }
+.account-tile { border:1px solid #e5eaf2; border-radius:1rem; padding:1rem; background:linear-gradient(135deg,#fff,#f8fbff); }
+.account-mask { letter-spacing:.12rem; }
+.timeline { list-style:none; padding-left:0; margin:0; }
+.timeline li { position:relative; padding-left:2rem; padding-bottom:1rem; }
+.timeline li:before { content:""; position:absolute; left:.25rem; top:.2rem; width:.8rem; height:.8rem; background:var(--brand-500); border-radius:50%; }
+.timeline li:after { content:""; position:absolute; left:.6rem; top:1rem; width:2px; height:calc(100% - .7rem); background:#dbe5f2; }
+.timeline li:last-child:after { display:none; }
+.timeline span { display:block; color:#5d6b82; }
+.btn:focus, .form-control:focus, .form-select:focus, .form-check-input:focus { box-shadow:var(--focus-ring); }
+.high-contrast { --surface:#fff; --ink:#000; }
+.high-contrast .app-card, .high-contrast .metric-card, .high-contrast .account-tile { border:2px solid #000; box-shadow:none; }
+.high-contrast .text-muted { color:#111 !important; }
+@media (prefers-contrast: more) { body { background:#fff; } .text-muted { color:#111 !important; } .app-card, .metric-card { border:2px solid #000; box-shadow:none; } }
+@media (max-width: 768px) { .display-5 { font-size:2rem; } .metric-card strong { font-size:1.35rem; } }

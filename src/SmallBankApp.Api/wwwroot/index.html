@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Small Bank App</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="css/site.css" rel="stylesheet">
+</head>
+<body>
+<a class="visually-hidden-focusable skip-link" href="#mainContent">Skip to banking dashboard</a>
+<nav class="navbar navbar-expand-lg navbar-dark app-nav sticky-top" aria-label="Primary navigation">
+  <div class="container-fluid px-4">
+    <a class="navbar-brand fw-bold" href="#">Small Bank</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item"><a class="nav-link active" href="#accounts">Accounts</a></li>
+        <li class="nav-item"><a class="nav-link" href="#transfers">Transfers</a></li>
+        <li class="nav-item"><a class="nav-link" href="#alerts">Alerts</a></li>
+        <li class="nav-item"><a class="nav-link" href="#onboarding">e-KYC</a></li>
+        <li class="nav-item"><a class="nav-link" href="#aml">AML</a></li>
+      </ul>
+      <button id="contrastBtn" class="btn btn-outline-light btn-sm me-2" type="button">High contrast</button>
+      <button id="demoLoginBtn" class="btn btn-light btn-sm" type="button">Biometric demo</button>
+    </div>
+  </div>
+</nav>
+<header class="hero-section text-white">
+  <div class="container py-5">
+    <div class="row align-items-center g-4">
+      <div class="col-lg-7">
+        <p class="badge text-bg-info text-dark fw-semibold mb-3">ASP.NET + Bootstrap + C# REST API + SQL Server 2022</p>
+        <h1 class="display-5 fw-bold">Secure digital banking for small financial institutions.</h1>
+        <p class="lead mb-4">Real-time account access, P2P transfers, bill pay readiness, biometric sign-in, real-time alerts, e-KYC onboarding, and AML-aware transfer controls.</p>
+        <div class="d-flex flex-wrap gap-2">
+          <a class="btn btn-light btn-lg" href="#transfers">Send demo transfer</a>
+          <a class="btn btn-outline-light btn-lg" href="/swagger" target="_blank" rel="noopener">Open REST API</a>
+        </div>
+      </div>
+      <div class="col-lg-5">
+        <div class="security-card p-4 rounded-4 shadow-lg">
+          <div class="d-flex align-items-center gap-3 mb-3">
+            <span class="status-dot bg-success"></span>
+            <div><strong>Security posture</strong><br><small>MFA required · TLS enforced · Audit logging enabled</small></div>
+          </div>
+          <div class="progress" role="progressbar" aria-label="Security score" aria-valuenow="92" aria-valuemin="0" aria-valuemax="100"><div class="progress-bar" style="width:92%">92%</div></div>
+          <ul class="list-unstyled mt-3 mb-0 small">
+            <li>✓ Biometric/passkey-ready frontend flow</li>
+            <li>✓ JWT-protected REST endpoints</li>
+            <li>✓ SQL Server 2022 schema and EF Core context</li>
+            <li>✓ AML rules for high-risk transfers</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+<main id="mainContent" class="container-fluid px-4 py-4">
+  <div id="toastRegion" class="toast-container position-fixed top-0 end-0 p-3" aria-live="polite" aria-atomic="true"></div>
+  <section class="row g-4 mb-4" aria-label="Key metrics">
+    <div class="col-md-3"><div class="metric-card"><span>Total available</span><strong id="totalAvailable">$0.00</strong></div></div>
+    <div class="col-md-3"><div class="metric-card"><span>Pending transfers</span><strong>2</strong></div></div>
+    <div class="col-md-3"><div class="metric-card"><span>Unread alerts</span><strong id="alertCount">3</strong></div></div>
+    <div class="col-md-3"><div class="metric-card"><span>AML reviews</span><strong id="amlCount">0</strong></div></div>
+  </section>
+  <div class="row g-4">
+    <section id="accounts" class="col-xl-5">
+      <div class="card app-card h-100"><div class="card-header bg-white"><h2 class="h5 mb-0">Accounts</h2></div><div class="card-body"><div id="accountList" class="vstack gap-3"></div></div></div>
+    </section>
+    <section class="col-xl-7">
+      <div class="card app-card h-100"><div class="card-header bg-white"><h2 class="h5 mb-0">Recent transactions</h2></div><div class="table-responsive"><table class="table align-middle mb-0"><thead><tr><th>Date</th><th>Description</th><th>Type</th><th class="text-end">Amount</th><th>Status</th></tr></thead><tbody id="transactionRows"></tbody></table></div></div>
+    </section>
+    <section id="transfers" class="col-xl-6">
+      <div class="card app-card h-100"><div class="card-header bg-white"><h2 class="h5 mb-0">Transfer funds</h2></div><div class="card-body">
+        <form id="transferForm" class="row g-3">
+          <div class="col-md-6"><label class="form-label" for="fromAccount">From account</label><select id="fromAccount" class="form-select"></select></div>
+          <div class="col-md-6"><label class="form-label" for="toAccount">To account</label><select id="toAccount" class="form-select"><option value="external-demo">External linked account ****8821</option><option value="internal-demo">Internal savings ****7788</option></select></div>
+          <div class="col-md-6"><label class="form-label" for="amount">Amount</label><div class="input-group"><span class="input-group-text">$</span><input id="amount" class="form-control" type="number" min="1" step="0.01" value="125.00" required></div></div>
+          <div class="col-md-6"><label class="form-label" for="memo">Memo</label><input id="memo" class="form-control" value="P2P transfer" maxlength="80"></div>
+          <div class="col-12"><div class="alert alert-info small mb-0">Transfers of $10,000 or more, suspicious keywords, or sanctioned patterns are routed to AML review.</div></div>
+          <div class="col-12"><button id="transferBtn" class="btn btn-primary w-100" type="submit">Submit transfer</button></div>
+        </form>
+      </div></div>
+    </section>
+    <section id="alerts" class="col-xl-6">
+      <div class="card app-card h-100"><div class="card-header bg-white"><h2 class="h5 mb-0">Real-time alerts</h2></div><div class="card-body">
+        <div class="row g-3">
+          <div class="col-md-6"><div class="form-check form-switch"><input class="form-check-input" type="checkbox" checked id="push"><label class="form-check-label" for="push">Push notifications</label></div></div>
+          <div class="col-md-6"><div class="form-check form-switch"><input class="form-check-input" type="checkbox" checked id="email"><label class="form-check-label" for="email">Email alerts</label></div></div>
+          <div class="col-md-6"><div class="form-check form-switch"><input class="form-check-input" type="checkbox" checked id="sms"><label class="form-check-label" for="sms">SMS alerts</label></div></div>
+          <div class="col-md-6"><div class="form-check form-switch"><input class="form-check-input" type="checkbox" checked id="security"><label class="form-check-label" for="security">Security alerts</label></div></div>
+          <div class="col-12"><label class="form-label" for="lowBalance">Low balance threshold</label><input id="lowBalance" class="form-range" type="range" min="50" max="1000" value="250"><output id="lowBalanceValue" class="badge text-bg-secondary">$250</output></div>
+        </div>
+      </div></div>
+    </section>
+    <section id="onboarding" class="col-xl-6">
+      <div class="card app-card h-100"><div class="card-header bg-white"><h2 class="h5 mb-0">Digital onboarding / e-KYC</h2></div><div class="card-body">
+        <ol class="timeline"><li><strong>Account registration</strong><span>Email, phone, and password rules enforced.</span></li><li><strong>Identity verification</strong><span>Document number and issuing state sent to e-KYC provider.</span></li><li><strong>MFA enrollment</strong><span>Authenticator app, SMS, email, or biometric passkey.</span></li><li><strong>Risk decision</strong><span>Verified, manual review, or rejected.</span></li></ol>
+      </div></div>
+    </section>
+    <section id="aml" class="col-xl-6">
+      <div class="card app-card h-100"><div class="card-header bg-white d-flex justify-content-between align-items-center"><h2 class="h5 mb-0">AML review queue</h2><span class="badge text-bg-warning">Compliance</span></div><div class="card-body"><div id="amlQueue" class="vstack gap-3"><p class="text-muted mb-0">No transfers currently held for review.</p></div></div></div>
+    </section>
+  </div>
+</main>
+<footer class="py-4 mt-4 border-top bg-white"><div class="container-fluid px-4 small text-muted">Small Bank App prototype · Frontend: Bootstrap, ASP.NET static assets, HTML, CSS · Backend: C#, REST API, SQL Server 2022</div></footer>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
